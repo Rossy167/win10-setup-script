@@ -15,6 +15,13 @@ Get-WindowsUpdate -ForceInstall
 .\DebloatWin10.ps1
 .\taskbar.bat
 
+
+$properties = Get-Item -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | select -ExpandProperty property
+$properties | ForEach-Object { Remove-ItemProperty -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name $_ }
+
+$properties = Get-Item -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | select -ExpandProperty property
+$properties | ForEach-Object { Remove-ItemProperty -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name $_ }
+
 function Disable-Indexing {
     Param($Drive)
     $obj = Get-WmiObject -Class Win32_Volume -Filter "DriveLetter='$Drive'"
