@@ -40,7 +40,7 @@ $drives | ForEach-Object { Disable-Indexing $_":" }
 
 .\InstallChoco.ps1
 
-$packages = @('sysinternals', 'adobe', 'chromium', 'slack', 'dolphin', 'nmap', 'wireshark', 'franz', 'github-desktop', 'firefox', 'steam', 'vscode', 'javaruntime', 'jdk11', 'vlc', '7zip', 'qbittorrent', 'python', 'discord')
+$packages = @('sysinternals', 'chromium', 'slack', 'dolphin', 'nmap', 'wireshark', 'franz', 'github-desktop', 'firefox', 'steam', 'vscode', 'javaruntime', 'jdk11', 'vlc', '7zip', 'qbittorrent', 'python', 'discord')
 
 $packages | ForEach-Object {choco install $_ -y}
 
