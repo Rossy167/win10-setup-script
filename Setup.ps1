@@ -13,8 +13,6 @@ Get-WindowsUpdate -ForceInstall
 # debloat 
 
 .\DebloatWin10.ps1
-.\taskbar.bat
-
 
 $properties = Get-Item -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | select -ExpandProperty property
 $properties | ForEach-Object { Remove-ItemProperty -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name $_ }
@@ -35,6 +33,10 @@ function Disable-Indexing {
 $drives = get-volume |select -ExpandProperty driveletter
 $drives | ForEach-Object { Disable-Indexing $_":" }
 
+# appearance
+
+.\taskbar.bat
+New-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0
 
 # install all wanted packages (basically rebloat ngl)
 
@@ -43,6 +45,10 @@ $drives | ForEach-Object { Disable-Indexing $_":" }
 $packages = @('sysinternals', 'adobe', 'chromium', 'slack', 'dolphin', 'nmap', 'wireshark', 'franz', 'github-desktop', 'firefox', 'steam', 'vscode', 'javaruntime', 'jdk11', 'vlc', '7zip', 'qbittorrent', 'python', 'discord')
 
 $packages | ForEach-Object {choco install $_ -y}
+
+# remove all the shit that choco has dumped on the desktop
+
+Remove-Item C:\Users\*\Desktop\*lnk –Force
 
 #Restart PC
 
