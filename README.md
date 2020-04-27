@@ -1,4 +1,4 @@
-# windows10-setup-script
+# win10-setup-script
 
 ## Introduction
 I personally have 2 use cases Windows 10:
