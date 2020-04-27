@@ -57,7 +57,7 @@ Start-Sleep -Seconds 60
 
 # remove all the shit that choco has dumped on the desktop
 
-Remove-Item C:\Users\*\Desktop\*lnk �Force
+Remove-Item C:\Users\*\Desktop\*lnk -Force
 
 # Set the java environment variables because it beats doing it manually
 
