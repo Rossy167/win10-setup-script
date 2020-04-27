@@ -13,9 +13,9 @@ Get-WindowsUpdate -ForceInstall
 
 # debloat 
 
-.\scripts\DebloatWin10.ps1
-.\scripts\disableconsumerfeatures.reg
-.\scripts\uninstall_onedrive.bat
+powershell .\scripts\DebloatWin10.ps1 
+regedit /s .\scripts\disableconsumerfeatures.reg
+powershell .\scripts\uninstall_onedrive.bat
 
 # remove start up items
 
@@ -48,7 +48,7 @@ New-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Pe
 
 # install all wanted packages (basically rebloat ngl)
 
-.\scripts\InstallChoco.ps1
+powershell .\scripts\InstallChoco.ps1
 
 $packages = @('sysinternals', 'chromium', 'github-desktop', 'firefox', 'steam', 'vscode', 'javaruntime', 'jdk11', 'vlc', '7zip', 'qbittorrent', 'python', 'discord', 'notepad++')
 $packages | ForEach-Object {choco install $_ -y}
