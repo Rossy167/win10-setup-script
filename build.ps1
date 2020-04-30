@@ -13,8 +13,8 @@ Get-WindowsUpdate -ForceInstall
 
 # debloat 
 
-.\scripts\DebloatWin10.ps1 
-regedit /s .\scripts\disableconsumerfeatures.reg
+.\scripts\DebloatWin10.ps1
+.\scripts\disableconsumerfeatures.reg
 .\scripts\uninstall_onedrive.bat
 
 # remove start up items
@@ -39,12 +39,19 @@ $drives = get-volume | Select-Object -ExpandProperty driveletter
 $drives | ForEach-Object { Disable-Indexing $_":" }
 
 # appearance
+
 $key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 Set-ItemProperty $key Hidden 0
 Set-ItemProperty $key HideFileExt 0
 Set-ItemProperty $key ShowSuperHidden 1
 New-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0
+
 .\scripts\taskbar.bat
+
+$Bags = 'HKCU:\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags'
+$DLID = '{885A186E-A440-4ADA-812B-DB871B942259}'
+(Get-ChildItem $bags -recurse | Where-Object PSChildName -like $DLID ) | Remove-Item
+ Get-Process explorer | Stop-Process
 
 # install all wanted packages (basically rebloat ngl)
 
