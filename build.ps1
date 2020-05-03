@@ -111,6 +111,10 @@ Invoke-WebRequest -Uri "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe"
 Start-Sleep -Seconds 15
 .\OOSU10.exe ooshutup10.cfg /silent /nosrp
 
+# set dolphin config to not be in documents
+New-Item -Path HKCU:\Software -Name 'Dolphin Emulator' –Force
+Set-ItemProperty -Path 'HKCU:\Software\Dolphin Emulator' -Name "UserConfigPath" -Value 'D:\EmulatorLibrary\DolphinSettings\'
+
 #Restart PC
 $rebootPending = Test-PendingReboot | Select-Object -ExpandProperty isrebootpending
 if $rebootPending {
