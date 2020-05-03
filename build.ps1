@@ -7,6 +7,7 @@
 # pay lip service to the idea of updates while we're at it
 
 Install-PackageProvider NuGet 
+Install-Module -Name PendingReboot -Force
 Install-Module PSWindowsUpdate 
 Get-WindowsUpdate -ForceDownload
 Get-WindowsUpdate -ForceInstall
@@ -111,6 +112,9 @@ Start-Sleep -Seconds 15
 .\OOSU10.exe ooshutup10.cfg /silent /nosrp
 
 #Restart PC
-Write-Host 'Restarting in 30 seconds'
-Start-Sleep -Seconds 30
-Restart-Computer -Force
+$rebootPending = Test-PendingReboot | Select-Object -ExpandProperty isrebootpending
+if $rebootPending {
+	Write-Host 'Restarting in 30 seconds'
+	Start-Sleep -Seconds 30
+	Restart-Computer -Force
+}
