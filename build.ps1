@@ -119,6 +119,10 @@ Set-ItemProperty -Path 'HKCU:\Software\Dolphin Emulator' -Name "UserConfigPath" 
 New-Item -Path $profile -ItemType File -Force
 Set-Content -Path $profile -Value "function Stop-AMDBloat {
     Get-Process | Where-Object processname -like *radeon* | Stop-Process
+}
+
+function fish {
+    bash -c 'fish'
 }" -Force
 function Stop-AMDBloat {
     Get-Process | Where-Object processname -like *radeon* | Stop-Process
