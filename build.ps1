@@ -21,14 +21,6 @@ Get-WindowsUpdate -ForceInstall
 .\scripts\disableconsumerfeatures.reg
 .\scripts\uninstall_onedrive.bat
 
-# remove start up items
-
-$properties = Get-Item -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | Select-Object -ExpandProperty property
-$properties | ForEach-Object { Remove-ItemProperty -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name $_ }
-
-$properties = Get-Item -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | Select-Object -ExpandProperty property
-$properties | ForEach-Object { Remove-ItemProperty -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name $_ }
-
 function Disable-Indexing {
     Param($Drive)
     $obj = Get-WmiObject -Class Win32_Volume -Filter "DriveLetter='$Drive'"
@@ -107,6 +99,14 @@ Set-ItemProperty -ErrorAction SilentlyContinue -Path "HKLM:\SOFTWARE\Microsoft\W
 Set-ItemProperty -ErrorAction SilentlyContinue -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\" -Name "SystemSettingsDownloadMode" -Value 0 | Out-Null
 Set-ItemProperty -ErrorAction SilentlyContinue -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" -Name "SystemPaneSuggestionsEnabled" -Value 0 | Out-Null
 
+# remove start up items
+
+$properties = Get-Item -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | Select-Object -ExpandProperty property
+$properties | ForEach-Object { Remove-ItemProperty -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name $_ }
+
+$properties = Get-Item -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | Select-Object -ExpandProperty property
+$properties | ForEach-Object { Remove-ItemProperty -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name $_ }
+
 # o and o stuff
 $path = Get-Location
 $path = $path.path + "\OOSU10.exe"
@@ -127,9 +127,6 @@ Set-Content -Path $profile -Value "function Stop-AMDBloat {
 function fish {
     bash -c 'fish'
 }" -Force
-function Stop-AMDBloat {
-    Get-Process | Where-Object processname -like *radeon* | Stop-Process
-}
 
 # enable bash
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart
