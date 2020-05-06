@@ -124,6 +124,15 @@ function Stop-AMDBloat {
     Get-Process | Where-Object processname -like *radeon* | Stop-Process
 }
 
+# enable bash
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart
+Invoke-WebRequest -Uri https://aka.ms/wsl-debian-gnulinux -OutFile c:\linux.appx -UseBasicParsing
+$location = get-location | Select-Object -ExpandProperty path
+Set-Location C:\
+Add-AppxPackage .\linux.appx
+Remove-Item linux.appx
+Set-Location $location
+
 #Restart PC
 $rebootPending = Test-PendingReboot | Select-Object -ExpandProperty isrebootpending
 if ($rebootPending) {
