@@ -112,12 +112,21 @@ Start-Sleep -Seconds 15
 .\OOSU10.exe ooshutup10.cfg /silent /nosrp
 
 # set dolphin config to not be in documents
-New-Item -Path HKCU:\Software -Name 'Dolphin Emulator' –Force
+New-Item -Path HKCU:\Software -Name 'Dolphin Emulator' ï¿½Force
 Set-ItemProperty -Path 'HKCU:\Software\Dolphin Emulator' -Name "UserConfigPath" -Value 'D:\EmulatorLibrary\DolphinSettings\'
+
+# add powershell profile, and some scripts i use regular, will probs add more to later
+New-Item -Path $profile -ItemType File -Force
+Set-Content -Path $profile -Value "function Stop-AMDBloat {
+    Get-Process | Where-Object processname -like *radeon* | Stop-Process
+}" -Force
+function Stop-AMDBloat {
+    Get-Process | Where-Object processname -like *radeon* | Stop-Process
+}
 
 #Restart PC
 $rebootPending = Test-PendingReboot | Select-Object -ExpandProperty isrebootpending
-if $rebootPending {
+if ($rebootPending) {
 	Write-Host 'Restarting in 30 seconds'
 	Start-Sleep -Seconds 30
 	Restart-Computer -Force
