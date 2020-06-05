@@ -1,12 +1,8 @@
 # win10-setup-script
 
 ## Introduction
-I personally have 2 use cases Windows 10:
 
-    1. Gaming
-    2. Active Directory/ general Microsofty Sys Admin work
-
-Since I'm unlikely to be doing AD work related things on a personal PC, the only thing I really want from my Windows 10 home PC is for it to be fast and clean. For me a gaming PC needs to be as simple as possible, it can be versatile and have a lot of uses, but these machines get clogged up fast, and Microsoft isn't helping by giving me a clogged up Windows 10 instance by default.
+A basic script for setting up a Windows 10 gaming PC at home. The key goal here is for it to be a clean and minimal install.
 
 ## Explanation
 
@@ -26,9 +22,7 @@ After these scripts have ran we do some regediting to remove startup items. I wa
 
 Taskbar.bat just removes the crappy search bar that doesn't do anything in the bottom left hand corner, making for a cleaner aesthetic. We edit the explorer settings so that we can view file extensions by default. 
 
-Next :clap: turning :clap: dark :clap: mode :clap: on. Which is very important. Obviously. 
-
-Game time started. Now we install choco and get it installing all the basics I want on a fresh windows installation. Which will change from time to time, but basically: a web browser, utilities, messaging and steam.
+Next we turn dark mode on. Then install choco and get it installing all the basics I want on a fresh windows installation. Which will change from time to time, but basically: a web browser, utilities, messaging and steam.
 
 After that we're pretty much done. Just clean up the desktop from all the installations. Set Java to do it's thing since it doesn't do that itself for some reason, thanks Minecraft for forcing me to acknowledge Java exists. A teeny bit more cleanup, stopping Windows from running nonsense. Set a quick bit of policy silently in OandO.
 
@@ -36,7 +30,7 @@ Wait for everything to stop processing, and perform a restart to clean up the st
 
 ## TL;DR
 
-On a fresh windows 10 build you can extract the contents of this repo and then run build.ps1 it makes things cleaner
+On a fresh windows 10 build you can extract the contents of this repo and then run build.ps1 it makes things cleaner. 
 
 To run it: 
 * Press the Windows key
