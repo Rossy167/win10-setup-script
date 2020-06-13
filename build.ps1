@@ -53,7 +53,7 @@ $DLID = '{885A186E-A440-4ADA-812B-DB871B942259}'
 
 .\scripts\InstallChoco.ps1
 
-$packages = @('chromium', 'github-desktop', 'firefox', 'steam', 'vscode', 'javaruntime', 'jdk11', 'vlc', '7zip', 'qbittorrent', 'python', 'discord', 'notepad++')
+$packages = @('chromium', 'github-desktop', 'steam', 'vscode', 'vlc', '7zip', 'qbittorrent', 'python', 'discord', 'notepad++')
 $packages | ForEach-Object {choco install $_ -y}
 Write-Host 'Giving everything time to install'
 Start-Sleep -Seconds 60
@@ -61,15 +61,6 @@ Start-Sleep -Seconds 60
 # remove all the shit that choco has dumped on the desktop
 
 Remove-Item C:\Users\*\Desktop\*lnk -Force
-
-# Set the java environment variables because it beats doing it manually
-
-$path = 'C:\Program Files\Java'
-$jdk = Get-ChildItem -Path $path -Filter "jdk*" | Select-Object -ExpandProperty FullName
-$jre = Get-ChildItem -Path $path -Filter "jre*" | Select-Object -ExpandProperty FullName
-
-setx /M JAVA_HOME $jdk
-setx /M JRE_HOME $jre
 
 # disable scheduled tasks
       
@@ -114,20 +105,9 @@ Invoke-WebRequest -Uri "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe"
 Start-Sleep -Seconds 15
 .\OOSU10.exe ooshutup10.cfg /silent /nosrp
 
-# set dolphin config to not be in documents
-New-Item -Path HKCU:\Software -Name 'Dolphin Emulator' -Force
-Set-ItemProperty -Path 'HKCU:\Software\Dolphin Emulator' -Name "UserConfigPath" -Value 'D:\EmulatorLibrary\DolphinSettings\'
-
 # add powershell profile, and some scripts i use regularly, will probs add more to later
 New-Item -Path $profile -ItemType File -Force
-Set-Content -Path $profile -Value "function Stop-AMDBloat {
-    Get-Process | Where-Object processname -like *radeon* | Stop-Process
-}
-
-function fish {
-    bash -c 'fish'
-}
-
+Set-Content -Path $profile -Value "
 function Block-Steam {
         New-NetFirewallRule -Action block -Program 'C:\Program Files (x86)\Common Files\Steam\SteamService.exe' -Profile any -Direction Outbound -Displayname 'Block-Steam Rossy' | Out-Null
         New-NetFirewallRule -Action block -Program 'C:\Program Files (x86)\Steam\bin\cef\cef.win7x64\steamwebhelper.exe' -Profile any -Direction Outbound -Displayname 'Block-Steam Rossy' | Out-Null
