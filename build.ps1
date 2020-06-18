@@ -104,8 +104,8 @@ Set-ItemProperty -ErrorAction SilentlyContinue -Path "HKCU:\SOFTWARE\Microsoft\W
 $properties = Get-Item -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | Select-Object -ExpandProperty property
 $properties | ForEach-Object { Remove-ItemProperty -path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name $_ }
 
-$properties = Get-Item -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | Select-Object -ExpandProperty property
-$properties | ForEach-Object { Remove-ItemProperty -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name $_ }
+$properties = Get-Item -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run | Select-Object -ExpandProperty property
+$properties | ForEach-Object { Remove-ItemProperty -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run -name $_ }
 
 # o and o stuff
 $path = Get-Location
