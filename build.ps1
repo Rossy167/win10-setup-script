@@ -53,7 +53,7 @@ $DLID = '{885A186E-A440-4ADA-812B-DB871B942259}'
 
 .\scripts\InstallChoco.ps1
 
-$packages = @('chromium', 'github-desktop', 'firefox', 'steam', 'vscode', 'javaruntime', 'jdk11', 'vlc', '7zip', 'qbittorrent', 'python', 'discord', 'notepad++')
+$packages = @('chromium', 'autohotkey', 'github-desktop', 'firefox', 'steam', 'vscode', 'javaruntime', 'jdk11', 'vlc', '7zip', 'qbittorrent', 'python', 'discord', 'notepad++', 'pcsx2')
 $packages | ForEach-Object {choco install $_ -y}
 Write-Host 'Giving everything time to install'
 Start-Sleep -Seconds 60
