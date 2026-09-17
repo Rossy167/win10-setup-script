@@ -9,16 +9,16 @@ Rename-Computer -NewName $pcname -PassThru | Out-Null
 
 # pay lip service to the idea of updates while we're at it
 
-Install-PackageProvider NuGet 
+Install-PackageProvider NuGet -Force
 Install-Module -Name PendingReboot -Force
-Install-Module PSWindowsUpdate 
+Install-Module PSWindowsUpdate -Force
 Get-WindowsUpdate -ForceDownload
 Get-WindowsUpdate -ForceInstall
 
 # debloat 
 
 .\scripts\DebloatWin10.ps1
-.\scripts\disableconsumerfeatures.reg
+reg import .\scripts\disableconsumerfeatures.reg
 .\scripts\uninstall_onedrive.bat
 
 function Disable-Indexing {
@@ -40,7 +40,7 @@ $key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 Set-ItemProperty $key Hidden 0
 Set-ItemProperty $key HideFileExt 0
 Set-ItemProperty $key ShowSuperHidden 1
-New-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0
+New-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme -Value 0 -Force
 
 .\scripts\taskbar.bat
 
@@ -108,11 +108,22 @@ $properties = Get-Item -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Exp
 $properties | ForEach-Object { Remove-ItemProperty -path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run -name $_ }
 
 # o and o stuff
+# Note: O&O rewrote ShutUp10 on .NET 8 as of v2.0, and its tweak category codes
+# have changed numbering schemes multiple times over the years (this cfg is from
+# the old S/P/Y/C/L/U/W/M/N/O scheme). Even ChrisTitusTech's WinUtil eventually
+# dropped cfg-file automation for this exact reason — codes drift faster than
+# anyone can track. /quiet is the one flag documented consistently across every
+# version; if settings silently don't apply, the cfg itself likely needs
+# regenerating: open OOSU10.exe's GUI once, set your preferences, and re-export.
 $path = Get-Location
 $path = $path.path + "\OOSU10.exe"
-Invoke-WebRequest -Uri "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -OutFile $path
-Start-Sleep -Seconds 15
-.\OOSU10.exe ooshutup10.cfg /silent /nosrp
+try {
+    Invoke-WebRequest -Uri "https://dl5.oo-software.com/files/ooshutup10/OOSU10.exe" -OutFile $path
+    Start-Sleep -Seconds 15
+    .\OOSU10.exe ooshutup10.cfg /quiet
+} catch {
+    Write-Host "O&O ShutUp10 step failed, skipping: $_"
+}
 
 # set dolphin config to not be in documents
 New-Item -Path HKCU:\Software -Name 'Dolphin Emulator' -Force
@@ -142,13 +153,9 @@ function Unblock-Steam {
 }" -Force
 
 # enable bash
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart
-Invoke-WebRequest -Uri https://aka.ms/wsl-debian-gnulinux -OutFile c:\linux.appx -UseBasicParsing
-$location = get-location | Select-Object -ExpandProperty path
-Set-Location C:\
-Add-AppxPackage .\linux.appx
-Remove-Item linux.appx
-Set-Location $location 
+# Old method manually sideloaded a .appx, which Microsoft's trust requirements now make unreliable.
+# wsl --install is the officially supported equivalent and does the same job in one line.
+wsl --install -d Debian --no-launch
 
 #Restart PC
 $rebootPending = Test-PendingReboot | Select-Object -ExpandProperty isrebootpending
